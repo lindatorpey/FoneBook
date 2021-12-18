@@ -1,5 +1,10 @@
 <resources>
     <string name="app_name">FoneBook</string>
     <string name="button_addFonebook">Add Entry</string>
-    <string name="hint_fonebookTitle">Fonebook Title</string>
+    <string name="hint_fonebookTitle">Name</string>
+    <string name="hint_fonebookAddress">Address</string>
+    <string name="hint_fonebookNumber">Number</string>
+    <string name="hint_fonebookEmail">Email Address</string>
+    <string name="menu_addFonebook">Add</string>
+    <string name="menu_cancelFonebook">Cancel</string>
 </resources>

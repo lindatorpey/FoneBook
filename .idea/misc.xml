@@ -4,6 +4,10 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="..\:/Users/35386/AndroidStudioProjects/FoneBook/app/src/main/res/layout/activity_fonebook.xml" value="0.20572916666666666" />
+        <entry key="..\:/Users/35386/AndroidStudioProjects/FoneBook/app/src/main/res/layout/activity_fonebook_list.xml" value="0.20572916666666666" />
+        <entry key="..\:/Users/35386/AndroidStudioProjects/FoneBook/app/src/main/res/layout/card_fonebook.xml" value="0.20572916666666666" />
+        <entry key="..\:/Users/35386/AndroidStudioProjects/FoneBook/app/src/main/res/menu/menu_fonebook.xml" value="0.20572916666666666" />
+        <entry key="..\:/Users/35386/AndroidStudioProjects/FoneBook/app/src/main/res/menu/menu_main.xml" value="0.20572916666666666" />
       </map>
     </option>
   </component>

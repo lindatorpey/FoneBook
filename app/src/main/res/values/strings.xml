@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">FoneBook</string>
+    <string name="button_addFonebook">Add Entry</string>
+    <string name="hint_fonebookTitle">Fonebook Title</string>
+</resources>

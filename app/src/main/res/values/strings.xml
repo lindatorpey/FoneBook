@@ -7,4 +7,7 @@
     <string name="hint_fonebookEmail">Email Address</string>
     <string name="menu_addFonebook">Add</string>
     <string name="menu_cancelFonebook">Cancel</string>
+    <string name="enter_fonebook_title">Please enter a Contact</string>
+    <string name="save_fonebook">Save Entry</string>
+    <string name="button_addImage">Add an Image</string>
 </resources>

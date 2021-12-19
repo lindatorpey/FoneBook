@@ -1,23 +1,19 @@
 package org.wit.fonebook.activities
 
 import android.content.Intent
-import android.icu.text.Transliterator
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuItem
-import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import org.wit.fonebook.R
-import org.wit.fonebook.databinding.ActivityFonebookBinding
+import org.wit.fonebook.adapters.FonebookAdapter
+import org.wit.fonebook.adapters.FonebookListener
 import org.wit.fonebook.databinding.ActivityFonebookListBinding
-import org.wit.fonebook.databinding.CardFonebookBinding
 import org.wit.fonebook.main.MainApp
 import org.wit.fonebook.models.FonebookModel
 
-class FonebookListActivity : AppCompatActivity() {
+class FonebookListActivity : AppCompatActivity(), FonebookListener {
 
     lateinit var app: MainApp
     private lateinit var binding: ActivityFonebookListBinding
@@ -33,7 +29,7 @@ class FonebookListActivity : AppCompatActivity() {
 
         val layoutManager = LinearLayoutManager(this)
         binding.recyclerView.layoutManager = layoutManager
-        binding.recyclerView.adapter = FonebookAdapter(app.fonebooks)
+        binding.recyclerView.adapter = FonebookAdapter(app.fonebooks.findAll(), this)
     }
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.menu_main, menu)
@@ -48,28 +44,17 @@ class FonebookListActivity : AppCompatActivity() {
         }
         return super.onOptionsItemSelected(item)
     }
+
+    override fun onFonebookClick(fonebook: FonebookModel) {
+        val launcherIntent = Intent(this, FonebookActivity::class.java)
+        launcherIntent.putExtra("fonebook_edit", fonebook)
+        startActivityForResult(launcherIntent, 0)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        binding.recyclerView.adapter?.notifyDataSetChanged()
+        super.onActivityResult(requestCode, resultCode, data)
+    }
 }
 
-class FonebookAdapter constructor(private var fonebooks: List<FonebookModel>):
-        RecyclerView.Adapter<FonebookAdapter.MainHolder>(){
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MainHolder{
-        val binding = CardFonebookBinding
-            .inflate(LayoutInflater.from(parent.context),parent,false)
-        return MainHolder(binding)
-    }
-    override fun onBindViewHolder(holder: MainHolder, position: Int){
-        val fonebook = fonebooks[holder.adapterPosition]
-        holder.bind(fonebook)
-    }
-    override fun getItemCount(): Int = fonebooks.size
 
-    class MainHolder(private val binding : CardFonebookBinding):
-            RecyclerView.ViewHolder(binding.root){
-                fun bind(fonebook: FonebookModel){
-                    binding.fonebookTitle.text = fonebook.title
-                    binding.address.text = fonebook.address
-                    binding.number.text = fonebook.number
-                    binding.email.text = fonebook.email
-                }
-            }
-        }

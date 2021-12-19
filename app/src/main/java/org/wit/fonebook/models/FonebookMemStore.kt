@@ -24,7 +24,8 @@ class FonebookMemStore: FonebookStore {
             foundFonebook.title = fonebook.title
             foundFonebook.address = fonebook.address
             foundFonebook.number = fonebook.number
-            fonebook.email = fonebook.email
+            foundFonebook.email = fonebook.email
+            foundFonebook.image = fonebook.image
             logAll()
         }
     }

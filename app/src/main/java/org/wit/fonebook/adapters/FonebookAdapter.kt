@@ -3,6 +3,7 @@ package org.wit.fonebook.adapters
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.squareup.picasso.Picasso
 import org.wit.fonebook.databinding.CardFonebookBinding
 import org.wit.fonebook.models.FonebookModel
 
@@ -34,6 +35,7 @@ class FonebookAdapter constructor(private var fonebooks: List<FonebookModel>,
                     binding.address.text = fonebook.address
                     binding.number.text = fonebook.number
                     binding.email.text = fonebook.email
+            Picasso.get().load(fonebook.image).resize(200,200).into(binding.imageIcon)
                     binding.root.setOnClickListener { listener.onFonebookClick(fonebook) }
                 }
             }

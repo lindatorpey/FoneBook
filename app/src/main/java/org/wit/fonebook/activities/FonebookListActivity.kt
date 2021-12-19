@@ -5,6 +5,8 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.recyclerview.widget.LinearLayoutManager
 import org.wit.fonebook.R
 import org.wit.fonebook.adapters.FonebookAdapter
@@ -17,6 +19,7 @@ class FonebookListActivity : AppCompatActivity(), FonebookListener {
 
     lateinit var app: MainApp
     private lateinit var binding: ActivityFonebookListBinding
+    private lateinit var refreshIntentLauncher: ActivityResultLauncher<Intent>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,6 +33,8 @@ class FonebookListActivity : AppCompatActivity(), FonebookListener {
         val layoutManager = LinearLayoutManager(this)
         binding.recyclerView.layoutManager = layoutManager
         binding.recyclerView.adapter = FonebookAdapter(app.fonebooks.findAll(), this)
+
+        registerRefreshCallback()
     }
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.menu_main, menu)
@@ -39,7 +44,7 @@ class FonebookListActivity : AppCompatActivity(), FonebookListener {
         when (item.itemId) {
             R.id.item_add -> {
                 val launcherIntent = Intent(this, FonebookActivity::class.java)
-                startActivityForResult(launcherIntent,0)
+                refreshIntentLauncher.launch(launcherIntent)
             }
         }
         return super.onOptionsItemSelected(item)
@@ -48,12 +53,13 @@ class FonebookListActivity : AppCompatActivity(), FonebookListener {
     override fun onFonebookClick(fonebook: FonebookModel) {
         val launcherIntent = Intent(this, FonebookActivity::class.java)
         launcherIntent.putExtra("fonebook_edit", fonebook)
-        startActivityForResult(launcherIntent, 0)
+        refreshIntentLauncher.launch(launcherIntent)
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        binding.recyclerView.adapter?.notifyDataSetChanged()
-        super.onActivityResult(requestCode, resultCode, data)
+    private fun registerRefreshCallback() {
+        refreshIntentLauncher =
+            registerForActivityResult(ActivityResultContracts.StartActivityForResult())
+            { binding.recyclerView.adapter?.notifyDataSetChanged() }
     }
 }
 

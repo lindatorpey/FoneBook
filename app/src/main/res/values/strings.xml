@@ -10,4 +10,6 @@
     <string name="enter_fonebook_title">Please enter a Contact</string>
     <string name="save_fonebook">Save Entry</string>
     <string name="button_addImage">Add an Image</string>
+    <string name="select_fonebook_image">Select Image</string>
+    <string name="change_fonebook_image">Change Image</string>
 </resources>

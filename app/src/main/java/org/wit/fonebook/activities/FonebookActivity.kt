@@ -1,12 +1,18 @@
 package org.wit.fonebook.activities
 
+import android.content.Intent
+import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import com.google.android.material.snackbar.Snackbar
+import com.squareup.picasso.Picasso
 import org.wit.fonebook.R
 import org.wit.fonebook.databinding.ActivityFonebookBinding
+import org.wit.fonebook.helpers.showImagePicker
 import org.wit.fonebook.main.MainApp
 import org.wit.fonebook.models.FonebookModel
 import timber.log.Timber
@@ -17,6 +23,7 @@ class FonebookActivity : AppCompatActivity() {
     private lateinit var binding: ActivityFonebookBinding
     var fonebook = FonebookModel()
     lateinit var app: MainApp
+    private lateinit var imageIntentLauncher : ActivityResultLauncher<Intent>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,6 +47,12 @@ class FonebookActivity : AppCompatActivity() {
             binding.number.setText(fonebook.number)
             binding.email.setText(fonebook.email)
             binding.btnAdd.setText(R.string.save_fonebook)
+            Picasso.get()
+                .load(fonebook.image)
+                .into(binding.fonebookImage)
+            if (fonebook.image != Uri.EMPTY){
+                binding.chooseImage.setText(R.string.change_fonebook_image)
+            }
         }
 
         binding.btnAdd.setOnClickListener() {
@@ -61,7 +74,13 @@ class FonebookActivity : AppCompatActivity() {
             setResult(RESULT_OK)
             finish()
             }
+
+        binding.chooseImage.setOnClickListener {
+            showImagePicker(imageIntentLauncher)
         }
+
+        registerImagePickerCallback()
+    }
 
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -75,5 +94,25 @@ class FonebookActivity : AppCompatActivity() {
             }
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    private fun registerImagePickerCallback() {
+        imageIntentLauncher =
+            registerForActivityResult(ActivityResultContracts.StartActivityForResult())
+            { result ->
+                when(result.resultCode){
+                    RESULT_OK -> {
+                        if (result.data != null) {
+                            i("Got Result ${result.data!!.data}")
+                            fonebook.image = result.data!!.data!!
+                            Picasso.get()
+                                .load(fonebook.image)
+                                .into(binding.fonebookImage)
+                            binding.chooseImage.setText(R.string.change_fonebook_image)
+                        }
+                    }
+                    RESULT_CANCELED -> { } else -> { }
+                }
+            }
     }
 }

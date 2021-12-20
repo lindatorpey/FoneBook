@@ -12,4 +12,6 @@
     <string name="button_addImage">Add an Image</string>
     <string name="select_fonebook_image">Select Image</string>
     <string name="change_fonebook_image">Change Image</string>
+    <string name="button_location">Add Location</string>
+    <string name="title_activity_map">MapActivity</string>
 </resources>

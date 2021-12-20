@@ -15,6 +15,7 @@ import org.wit.fonebook.databinding.ActivityFonebookBinding
 import org.wit.fonebook.helpers.showImagePicker
 import org.wit.fonebook.main.MainApp
 import org.wit.fonebook.models.FonebookModel
+import org.wit.fonebook.models.Location
 import timber.log.Timber
 import timber.log.Timber.i
 
@@ -24,6 +25,8 @@ class FonebookActivity : AppCompatActivity() {
     var fonebook = FonebookModel()
     lateinit var app: MainApp
     private lateinit var imageIntentLauncher : ActivityResultLauncher<Intent>
+    private lateinit var mapIntentLauncher : ActivityResultLauncher<Intent>
+    //var location = Location(52.245696, -7.139102, 15f)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -79,7 +82,20 @@ class FonebookActivity : AppCompatActivity() {
             showImagePicker(imageIntentLauncher)
         }
 
+        binding.fonebookLocation.setOnClickListener {
+            val location = Location(52.245696, -7.139102, 15f)
+            if (fonebook.zoom != 0f) {
+                location.lat =  fonebook.lat
+                location.lng = fonebook.lng
+                location.zoom = fonebook.zoom
+            }
+            val launcherIntent = Intent(this, MapActivity::class.java)
+                .putExtra("location", location)
+            mapIntentLauncher.launch(launcherIntent)
+        }
+
         registerImagePickerCallback()
+        registerMapCallback()
     }
 
 
@@ -110,6 +126,25 @@ class FonebookActivity : AppCompatActivity() {
                                 .into(binding.fonebookImage)
                             binding.chooseImage.setText(R.string.change_fonebook_image)
                         }
+                    }
+                    RESULT_CANCELED -> { } else -> { }
+                }
+            }
+    }
+    private fun registerMapCallback() {
+        mapIntentLauncher =
+            registerForActivityResult(ActivityResultContracts.StartActivityForResult())
+            { result ->
+                when (result.resultCode) {
+                    RESULT_OK -> {
+                        if (result.data != null) {
+                            i("Got Location ${result.data.toString()}")
+                            val location = result.data!!.extras?.getParcelable<Location>("location")!!
+                            i("Location == $location")
+                            fonebook.lat = location.lat
+                            fonebook.lng = location.lng
+                            fonebook.zoom = location.zoom
+                        } // end of if
                     }
                     RESULT_CANCELED -> { } else -> { }
                 }

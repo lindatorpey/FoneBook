@@ -14,4 +14,9 @@
     <string name="change_fonebook_image">Change Image</string>
     <string name="button_location">Add Location</string>
     <string name="title_activity_map">MapActivity</string>
+    <string name="menu_deleteFonebook">Delete</string>
+    <string name="title_activity_fonebook_maps">Map of all Contacts</string>
+    <string name="fonebook_image_placeholder">Fonebook Image</string>
+    <string name="fonebook_title_placeholder">Fonebook Title</string>
+    <string name="fonebook_description_placeholder">Fonebook Description</string>
 </resources>

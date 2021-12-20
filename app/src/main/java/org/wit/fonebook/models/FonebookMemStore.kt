@@ -32,6 +32,9 @@ class FonebookMemStore: FonebookStore {
             logAll()
         }
     }
+    override fun delete(fonebook: FonebookModel){
+        fonebooks.remove(fonebook)
+    }
     fun logAll() {
         fonebooks.forEach{ i("${it}")}
     }

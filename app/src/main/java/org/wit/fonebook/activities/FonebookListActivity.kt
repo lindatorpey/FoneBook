@@ -20,6 +20,7 @@ class FonebookListActivity : AppCompatActivity(), FonebookListener {
     lateinit var app: MainApp
     private lateinit var binding: ActivityFonebookListBinding
     private lateinit var refreshIntentLauncher: ActivityResultLauncher<Intent>
+    private lateinit var mapIntentLauncher : ActivityResultLauncher<Intent>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,9 +33,12 @@ class FonebookListActivity : AppCompatActivity(), FonebookListener {
 
         val layoutManager = LinearLayoutManager(this)
         binding.recyclerView.layoutManager = layoutManager
-        binding.recyclerView.adapter = FonebookAdapter(app.fonebooks.findAll(), this)
+        //binding.recyclerView.adapter = FonebookAdapter(app.fonebooks.findAll(), this)
+        loadFonebooks()
 
+        loadFonebooks()
         registerRefreshCallback()
+        registerMapCallback()
     }
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.menu_main, menu)
@@ -45,6 +49,10 @@ class FonebookListActivity : AppCompatActivity(), FonebookListener {
             R.id.item_add -> {
                 val launcherIntent = Intent(this, FonebookActivity::class.java)
                 refreshIntentLauncher.launch(launcherIntent)
+            }
+            R.id.item_map -> {
+                val launcherIntent = Intent(this, FonebookMapsActivity::class.java)
+                mapIntentLauncher.launch(launcherIntent)
             }
         }
         return super.onOptionsItemSelected(item)
@@ -59,7 +67,20 @@ class FonebookListActivity : AppCompatActivity(), FonebookListener {
     private fun registerRefreshCallback() {
         refreshIntentLauncher =
             registerForActivityResult(ActivityResultContracts.StartActivityForResult())
-            { binding.recyclerView.adapter?.notifyDataSetChanged() }
+            { loadFonebooks() }
+    }
+    private fun registerMapCallback() {
+        mapIntentLauncher =
+            registerForActivityResult(ActivityResultContracts.StartActivityForResult())
+            {}
+    }
+
+    private fun loadFonebooks(){
+        showFonebooks(app.fonebooks.findAll())
+    }
+    fun showFonebooks(fonebooks: List<FonebookModel>){
+        binding.recyclerView.adapter = FonebookAdapter(fonebooks, this)
+        binding.recyclerView.adapter?.notifyDataSetChanged()
     }
 }
 
